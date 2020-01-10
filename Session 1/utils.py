@@ -29,6 +29,7 @@ def extract_interval(x, x_bounds):
 '''
 # =============================================================================
 # Alternative way
+#
 #     # Create boolean array with values indicating if each element is in interval
 #     a_bool = (x >= x_bounds[0]) & (x <= x_bounds[1])
 #     
@@ -47,16 +48,56 @@ def extract_interval(x, x_bounds):
         z += 1
     return idx1
 
-x2 = np.arange(-0.6, 3.8, 0.4)
-x_bounds2=(-0.3, 1.5)
-
-x1 = np.arange(0, 10)
-x_bounds1=(3, 7)
-
-extract_interval(x2, x_bounds2)
-extract_interval(x1, x_bounds1)
-        
+def extrema_indices(x):
+        ''' Return indices of all local extrema in `y`. 
     
+    Parameters
+    ----------
+    y : 1D numpy array
+        Array of values to search for local extrema.
+        
+    Returns
+    -------
+    1D numpy array
+        Array of indices for local extrema.
+    
+    '''
+# =============================================================================
+# Alternative way  
+#    
+#     # Find local maxima
+#     idx_max, _ = find_peaks(y)
+#     
+#     # Find local minima
+#     idx_min, _ = find_peaks(-y)
+#     
+#     # Combine the two index arrays to one array and return it
+#     return np.append(idx_max, idx_min)
+# =============================================================================
+    
+    z=[] 
+    w=[]
+    z.append(x[find_peaks(x)[0]])
+    w.append(x[find_peaks(-x)[0]])
+    
+    return np.append(z,w)
 
-
-
+def arrays_todict(x_arr, y_arr):
+    ''' 
+    Return a dictionary with y-values in string form as keys 
+    and x- and y-values as values. 
+    
+    Parameters
+    ----------
+    x_arr : 1D numpy array
+        Array of x-values
+    y_arr : 1D numpy array
+        Array of y-values
+        
+    Returns
+    -------
+    dict
+        Dictionary of the form 
+        {'y1': (x1, y1), 'y2': (x2, y2), ..., 'yn': (xn, yn)}
+    '''
+    return {f'{y:.2f}': (x, y) for x, y in zip(x_arr, y_arr)}
